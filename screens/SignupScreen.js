@@ -3,11 +3,33 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import FormInput from '../components/FormInput.js';
 import FormButton from '../components/FormButton';
 
+import { GoogleSignin, GoogleButton, GoogleSigninButton } from '@react-native-community/google-signin';
+
+GoogleSignin.configure({
+    webClientId: "850930616765-6qirch0v0p4b0buq5jetf5dju4ec1fuv.apps.googleusercontent.com",
+    offlineAccess: true
+})
 const SignupScreen = ({ navigation }) => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
 
+    const [usergoogleinfo, setUsergoogleinfo] = useState({
+        userGoogleInfo: {},
+        loader: false
+    });
+    const signIn = async () => {
+        try {
+            await GoogleSignin.hasPlayServices()
+            const userInfo = await GoogleSignin.signIn();
+            setUsergoogleinfo({
+                userGoogleInfo: userInfo,
+                loader: true
+            });
+        } catch (e) {
+            console.log(e, "error");
+        }
+    }
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Create an account</Text>
@@ -40,9 +62,26 @@ const SignupScreen = ({ navigation }) => {
 
             <FormButton
                 buttonTitle="Sign Up"
-                onPress={() => { }}
+                onPress={() => navigation.navigate('Home')}
             />
-
+            <View>
+                <GoogleSigninButton
+                    onPress={signIn}
+                    size={GoogleSigninButton.Size.Dark}
+                    style={{ width: 100, height: 100 }}
+                />
+                {usergoogleinfo.loaded ?
+                    <View>
+                        <Text>{usergoogleinfo.userGoogleInfo.user.name}</Text>
+                        <Text>{usergoogleinfo.userGoogleInfo.user.email}</Text>
+                        <Image
+                            style={{ width: '100', height: '100' }}
+                            source={{ uri: this.state.GoogleInfo.user.photo }}
+                        />
+                    </View> :
+                    <Text>Not Signedin</Text>
+                }
+            </View>
             <View style={styles.textPrivate}>
                 <Text style={styles.color_textPrivate}>By registering, you confirm that you accept our </Text>
                 <TouchableOpacity onPress={() => alert('Terms Clicked!')}>

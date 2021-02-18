@@ -20,3 +20,6 @@ Be sure to subscribe to our YouTube channel for more videos like this!
 
 SHA1-KEY:"5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25"
 tracking number in Auth0:"c5097841059545725"
+
+Client-id:"850930616765-6lo4eb5veerhh52pdakpmm1p6mt2c4dr.apps.googleusercontent.com"
+Client-secret:"PW0T07N9_ktikJdpL77Vi59p"
