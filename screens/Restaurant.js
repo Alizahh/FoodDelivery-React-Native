@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { isIphoneX } from 'react-native-iphone-x-helper'
 
-import { icons, COLORS, SIZES, FONTS } from '../constants'
+import { icons, images, COLORS, SIZES, FONTS } from '../constants'
 
 const Restaurant = ({ route, navigation }) => {
 
@@ -165,7 +165,7 @@ const Restaurant = ({ route, navigation }) => {
                             <View style={{ height: SIZES.height * 0.35 }}>
                                 {/* Food Image */}
                                 <Image
-                                    source={item.photo}
+                                    source={images.kek_lapis_shop}
                                     resizeMode="cover"
                                     style={{
                                         width: SIZES.width,
@@ -256,7 +256,7 @@ const Restaurant = ({ route, navigation }) => {
 
                                 <Text style={{
                                     ...FONTS.body3, color: COLORS.darygray
-                                }}>{item.calories.toFixed(2)} cal</Text>
+                                }}>{Number(item.calories).toFixed(2)} cal</Text>
                             </View>
                         </View>
                     ))
@@ -405,20 +405,6 @@ const Restaurant = ({ route, navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-
-                {isIphoneX() &&
-                    <View
-                        style={{
-                            position: 'absolute',
-                            bottom: -34,
-                            left: 0,
-                            right: 0,
-                            height: 34,
-                            backgroundColor: COLORS.white
-                        }}
-                    >
-                    </View>
-                }
             </View>
         )
     }

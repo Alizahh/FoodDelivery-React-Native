@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import FormInput from '../components/FormInput.js';
 import FormButton from '../components/FormButton';
-
+import axios from "axios";
 import { GoogleSignin, GoogleButton, GoogleSigninButton } from '@react-native-community/google-signin';
 
 GoogleSignin.configure({
@@ -12,7 +12,7 @@ GoogleSignin.configure({
 const SignupScreen = ({ navigation }) => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-    const [confirmPassword, setConfirmPassword] = useState();
+    // const [confirmPassword, setConfirmPassword] = useState();
 
     const [usergoogleinfo, setUsergoogleinfo] = useState({
         userGoogleInfo: {},
@@ -29,6 +29,21 @@ const SignupScreen = ({ navigation }) => {
         } catch (e) {
             console.log(e, "error");
         }
+    }
+
+    const submitUser = async () => {
+        let data = {
+            name: "",
+            email: email,
+            Bank_Balance: 4000
+        }
+        // try {
+        //     let submit = await axios.post(`https://sleepy-earth-11653.herokuapp.com/user/regUser`, data);
+        //     alert("success!");
+        // } catch (e) {
+        //     alert(e);
+        // }
+        navigation.navigate('Home');
     }
     return (
         <View style={styles.container}>
@@ -52,17 +67,17 @@ const SignupScreen = ({ navigation }) => {
                 secureTextEntry={true}
             />
 
-            <FormInput
+            {/* <FormInput
                 labelValue={confirmPassword}
                 onChangeText={(userPassword) => setPassword(userPassword)}
                 placeholderText="Confirm Password"
                 iconType="lock"
                 secureTextEntry={true}
-            />
+            /> */}
 
             <FormButton
                 buttonTitle="Sign Up"
-                onPress={() => navigation.navigate('Home')}
+                onPress={submitUser}
             />
             <View>
                 <GoogleSigninButton
