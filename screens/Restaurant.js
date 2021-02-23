@@ -165,7 +165,7 @@ const Restaurant = ({ route, navigation }) => {
                             <View style={{ height: SIZES.height * 0.35 }}>
                                 {/* Food Image */}
                                 <Image
-                                    source={images.kek_lapis_shop}
+                                    source={images.honey_mustard_chicken_burger}
                                     resizeMode="cover"
                                     style={{
                                         width: SIZES.width,

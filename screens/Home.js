@@ -22,7 +22,7 @@ const Home = ({ navigation }) => {
     const [categories, setCategories] = React.useState(categoryData)
     const [selectedCategory, setSelectedCategory] = React.useState(null)
     const [restaurants, setRestaurants] = React.useState(restaurantData)
-    const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation)
+    const [currentLocation, setCurrentLocation] = React.useState({})
     console.log(categories, "categories dataaaaaaaaaaaa")
 
     const initialCurrentLocation = {
@@ -33,6 +33,7 @@ const Home = ({ navigation }) => {
         }
     }
     const APIs = async () => {
+        setCurrentLocation(initialCurrentLocation);
         console.log("Categories")
         try {
             const category = await axios.get(`https://sleepy-earth-11653.herokuapp.com/restaurantData/Allcategories`);
@@ -144,7 +145,7 @@ const Home = ({ navigation }) => {
                         marginRight: SIZES.padding,
                         ...styles.shadow
                     }}
-                // onPress={() => onSelectCategory(item)}
+                    onPress={() => onSelectCategory(item)}
                 >
                     <View
                         style={{
@@ -157,7 +158,7 @@ const Home = ({ navigation }) => {
                         }}
                     >
                         <Image
-                            source={icons.hamburger}
+                            source={icons.fries}
                             resizeMode="contain"
                             style={{
                                 width: 30,
@@ -212,7 +213,7 @@ const Home = ({ navigation }) => {
                     }}
                 >
                     <Image
-                        source={images.ice_kacang}
+                        source={images.honey_mustard_chicken_burger}
                         resizeMode="cover"
                         style={{
                             width: "100%",

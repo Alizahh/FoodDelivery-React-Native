@@ -2,11 +2,23 @@ import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import FormInput from '../components/FormInput.js';
 import FormButton from '../components/FormButton';
-
+import axios from "axios";
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-
+    const submitUser = async () => {
+        let data = {
+            email: email,
+            password: password
+        }
+        try {
+            let submit = await axios.post(`https://sleepy-earth-11653.herokuapp.com/user/login`, data);
+            alert("success!");
+            navigation.navigate('Home');
+        } catch (e) {
+            alert(e);
+        }
+    }
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Create an account</Text>
@@ -30,11 +42,11 @@ const LoginScreen = ({ navigation }) => {
             />
             <FormButton
                 buttonTitle="Login"
-                onPress={() => navigation.navigate('Home')}
+                onPress={submitUser}
             />
             <TouchableOpacity
                 style={styles.navButton}
-                onPress={() => navigation.navigate('Home')}>
+                onPress={submitUser}>
             </TouchableOpacity>
         </View>
     );

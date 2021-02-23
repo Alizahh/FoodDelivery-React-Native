@@ -30,7 +30,7 @@ const OrderDelivery = ({ route, navigation }) => {
         let fromLoc = currentLocation.gps
         let toLoc = restaurant.location
         let street = currentLocation.streetName
-
+        // console.log(toLoc, "restaurant location", restaurant.location, "====>>data given")
         let mapRegion = {
             latitude: (fromLoc.latitude + toLoc.latitude) / 2,
             longitude: (fromLoc.longitude + toLoc.longitude) / 2,
@@ -45,7 +45,10 @@ const OrderDelivery = ({ route, navigation }) => {
         setRegion(mapRegion)
 
     }, [])
-
+    submitOrder = () => {
+        alert("order placed");
+        navigation.navigate('Home');
+    }
     function calculateAngle(coordinates) {
         let startLat = coordinates[0]["latitude"]
         let startLng = coordinates[0]["longitude"]
@@ -148,8 +151,8 @@ const OrderDelivery = ({ route, navigation }) => {
                         origin={fromLocation}
                         destination={toLocation}
                         apikey={GOOGLE_API_KEY}
-                        strokeWidth={5}
-                        strokeColor={COLORS.primary}
+                        strokeWidth={3}
+                        strokeColor="hotpink"
                         optimizeWaypoints={true}
                         onReady={result => {
                             setDuration(result.duration)
@@ -299,9 +302,9 @@ const OrderDelivery = ({ route, navigation }) => {
                                 justifyContent: 'center',
                                 borderRadius: 10
                             }}
-                            onPress={() => navigation.navigate("Home")}
+                            onPress={submitOrder}
                         >
-                            <Text style={{ ...FONTS.h4, color: COLORS.white }}>Call</Text>
+                            <Text style={{ ...FONTS.h4, color: COLORS.white }}>Place Order</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -313,7 +316,7 @@ const OrderDelivery = ({ route, navigation }) => {
                                 justifyContent: 'center',
                                 borderRadius: 10
                             }}
-                            onPress={() => navigation.goBack()}
+                            onPress={() => { navigation.navigate('Restaurant') }}
                         >
                             <Text style={{ ...FONTS.h4, color: COLORS.white }}>Cancel</Text>
                         </TouchableOpacity>

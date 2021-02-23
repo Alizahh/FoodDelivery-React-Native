@@ -33,17 +33,17 @@ const SignupScreen = ({ navigation }) => {
 
     const submitUser = async () => {
         let data = {
-            name: "",
             email: email,
+            password: password,
             Bank_Balance: 4000
         }
-        // try {
-        //     let submit = await axios.post(`https://sleepy-earth-11653.herokuapp.com/user/regUser`, data);
-        //     alert("success!");
-        // } catch (e) {
-        //     alert(e);
-        // }
-        navigation.navigate('Home');
+        try {
+            let submit = await axios.post(`https://sleepy-earth-11653.herokuapp.com/user/regUser`, data);
+            alert("success!");
+            navigation.navigate('Home');
+        } catch (e) {
+            alert("try again");
+        }
     }
     return (
         <View style={styles.container}>
