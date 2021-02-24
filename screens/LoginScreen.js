@@ -1,23 +1,49 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import FormInput from '../components/FormInput.js';
 import FormButton from '../components/FormButton';
 import axios from "axios";
 const LoginScreen = ({ navigation }) => {
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [userDetails, setUserDetails] = useState({});
+    const [ModalOpen, setModaOpen] = useState(false);
+    const [message, setMessage] = useState("");
     const submitUser = async () => {
         let data = {
             email: email,
             password: password
         }
-        try {
-            let submit = await axios.post(`https://sleepy-earth-11653.herokuapp.com/user/login`, data);
-            alert("success!");
-            navigation.navigate('Home');
-        } catch (e) {
-            alert(e);
+        if (email !== "" && password !== "") {
+            try {
+                let submit = await axios.post(`https://sleepy-earth-11653.herokuapp.com/user/login`, data);
+                console.log(submit.data.data, "submit");
+                setUserDetails(submit.data.data);
+                setMessage("You have successfully logged in!")
+                setEmail("")
+                setPassword("")
+                setModaOpen(true);
+                let email = await axios.post(`https://sleepy-earth-11653.herokuapp.com/sendMail`);
+                console.log(email, "emailllllllllllll")
+                alert("email sent");
+                navigation.navigate('Home');
+
+            } catch (e) {
+                setMessage("Wrong password or email.")
+                setPassword("")
+                setModaOpen(true);
+                console.log(e, "error in login");
+                // alert("Wrong Password or email");
+            }
+
+        } else {
+            setMessage("Empty fields aren't accepted.")
+            setEmail("")
+            setPassword("")
+            setModaOpen(true);
+            navigation.navigate('Login');
         }
+
     }
     return (
         <View style={styles.container}>
@@ -48,6 +74,30 @@ const LoginScreen = ({ navigation }) => {
                 style={styles.navButton}
                 onPress={submitUser}>
             </TouchableOpacity>
+
+            <Modal
+                transparent={true}
+                visible={ModalOpen}
+                onRequestClose={() => {
+                    setModaOpen(false);
+                }}
+            >
+                <View style={styles.view}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalTextHeading}> Disclaimer</Text>
+                        <Text style={styles.modalText}>{message}</Text>
+
+                        <TouchableHighlight
+                            style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                            onPress={() => {
+                                setModaOpen(false);
+                            }}
+                        >
+                            <Text style={styles.textStyle}>Cancel</Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -89,4 +139,45 @@ const styles = StyleSheet.create({
         fontFamily: 'Lato-Regular',
         color: 'grey',
     },
+
+    view: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+    openButton: {
+        backgroundColor: "#115454",
+        borderRadius: 5,
+        padding: 15,
+        elevation: 2
+    },
+    textStyle: {
+        color: "white",
+        textAlign: "center",
+    },
+    modalText: {
+        marginBottom: 15,
+    },
+    modalTextHeading: {
+        marginBottom: 15,
+        fontWeight: "bold",
+        // fontSize: "16px"
+    }
+
 });

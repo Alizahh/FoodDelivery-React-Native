@@ -10,8 +10,15 @@ import MapViewDirections from "react-native-maps-directions";
 
 import { COLORS, FONTS, icons, SIZES, GOOGLE_API_KEY } from "../constants"
 
+// import stripe from 'tipsi-stripe';
+
 const OrderDelivery = ({ route, navigation }) => {
 
+    // stripe.setOptions({
+    //     publishableKey: 'pk_test_51INtknCmKO2vXjCvEqnDcNP8bWng9ytDb1IHTkbGFluiiinZdBbQiRqzl5tuCzDX51PGyjwhJEWBqRE5UaP0zg4Q002w0LG5bg',
+    //     // merchantId: 'MERCHANT_ID', // Optional
+    //     androidPayMode: 'test', // Android only
+    // });
     const mapView = React.useRef()
 
     const [restaurant, setRestaurant] = React.useState(null)
@@ -45,9 +52,26 @@ const OrderDelivery = ({ route, navigation }) => {
         setRegion(mapRegion)
 
     }, [])
-    submitOrder = () => {
+    submitOrder = async () => {
+        console.log("here in submit ")
         alert("order placed");
-        navigation.navigate('Home');
+        // try {
+        //     const paymentMethod = await stripe.createPaymentMethod({
+        //         card: {
+        //             number: '4000002500003155',
+        //             cvc: '123',
+        //             expMonth: 11,
+        //             expYear: 2020
+        //         }
+        //     });
+        // } catch (e) {
+        //     alert(e);
+        // }
+        // let confirmpayment = await stripe.confirmPaymentIntent({ clientSecret: 'sk_test_51INtknCmKO2vXjCvNSkSFx1DFPOygQrNPcWjIeZp7OAVSeejIN4qDp5y3djoZT5cEmepCFl8C1F5WSfQd47NKYgB00RW8PlgrO' })
+        // console.log(paymentMethod, "payment method");
+        // console.log(confirmpayment, "confirm payment");
+
+
     }
     function calculateAngle(coordinates) {
         let startLat = coordinates[0]["latitude"]

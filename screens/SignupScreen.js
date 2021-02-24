@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import FormInput from '../components/FormInput.js';
 import FormButton from '../components/FormButton';
 import axios from "axios";
@@ -12,24 +12,42 @@ GoogleSignin.configure({
 const SignupScreen = ({ navigation }) => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    const [emailValidation, setEmailValidation] = useState();
     // const [confirmPassword, setConfirmPassword] = useState();
-
+    const [ModalOpen, setModaOpen] = useState(false);
+    const [message, setMessage] = useState("");
     const [usergoogleinfo, setUsergoogleinfo] = useState({
         userGoogleInfo: {},
         loader: false
     });
     const signIn = async () => {
         try {
-            await GoogleSignin.hasPlayServices()
+            let test = await GoogleSignin.hasPlayServices();
+            console.log(test, "testttttttttttttt")
             const userInfo = await GoogleSignin.signIn();
+            console.log(userInfo, "userInfooooooooooooooooooooooooo");
+            console.log
             setUsergoogleinfo({
                 userGoogleInfo: userInfo,
                 loader: true
             });
+            SVGPathSegCurvetoCubicSmoothRel.log(userInfo, "userrrrrrrrrrrrrrrrrrrr infooooooooooooo")
+            navigation.navigate('Home');
         } catch (e) {
             console.log(e, "error");
         }
     }
+    const emailChange = (e) => {
+        let email = /^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
+
+        if (!email.test(e)) {
+            setEmailValidation(false);
+        } else {
+            setEmailValidation(true);
+        }
+
+        setEmail(e);
+    };
 
     const submitUser = async () => {
         let data = {
@@ -37,21 +55,62 @@ const SignupScreen = ({ navigation }) => {
             password: password,
             Bank_Balance: 4000
         }
-        try {
-            let submit = await axios.post(`https://sleepy-earth-11653.herokuapp.com/user/regUser`, data);
-            alert("success!");
-            navigation.navigate('Home');
-        } catch (e) {
-            alert("try again");
+        if (email !== "" && password !== "") {
+            try {
+                let submit = await axios.post(`https://sleepy-earth-11653.herokuapp.com/user/regUser`, data);
+                console.log(submit.data.data, "user reguser request")
+                let email = await axios.post(`https://sleepy-earth-11653.herokuapp.com/sendMail`);
+                setMessage("You have successfully signed in!")
+                setModaOpen(true);
+                setEmail("")
+                setPassword("")
+                navigation.navigate('Home');
+                return submit;
+            } catch (e) {
+                setMessage("This email is already in user.")
+                setEmail("")
+                setPassword("")
+                setModaOpen(true);
+                console.log(e, "erorr in sending reg req")
+            }
+        } else {
+            setMessage("Empty fields aren't accepted.")
+            setEmail("")
+            setPassword("")
+            setModaOpen(true);
         }
-    }
+    };
+
     return (
         <View style={styles.container}>
+            <Modal
+                transparent={true}
+                visible={ModalOpen}
+                onRequestClose={() => {
+                    setModaOpen(false);
+                }}
+            >
+                <View style={styles.view}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalTextHeading}> Disclaimer</Text>
+                        <Text style={styles.modalText}>{message}</Text>
+
+                        <TouchableHighlight
+                            style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                            onPress={() => {
+                                setModaOpen(false);
+                            }}
+                        >
+                            <Text style={styles.textStyle}>Cancel</Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+            </Modal>
             <Text style={styles.text}>Create an account</Text>
 
             <FormInput
                 labelValue={email}
-                onChangeText={(userEmail) => setEmail(userEmail)}
+                onChangeText={(e) => emailChange(e)}
                 placeholderText="Email"
                 iconType="user"
                 keyboardType="email-address"
@@ -66,14 +125,6 @@ const SignupScreen = ({ navigation }) => {
                 iconType="lock"
                 secureTextEntry={true}
             />
-
-            {/* <FormInput
-                labelValue={confirmPassword}
-                onChangeText={(userPassword) => setPassword(userPassword)}
-                placeholderText="Confirm Password"
-                iconType="lock"
-                secureTextEntry={true}
-            /> */}
 
             <FormButton
                 buttonTitle="Sign Up"
@@ -154,4 +205,46 @@ const styles = StyleSheet.create({
         fontFamily: 'Lato-Regular',
         color: 'grey',
     },
+
+
+
+    view: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+    openButton: {
+        backgroundColor: "#115454",
+        borderRadius: 5,
+        padding: 15,
+        elevation: 2
+    },
+    textStyle: {
+        color: "white",
+        textAlign: "center",
+    },
+    modalText: {
+        marginBottom: 15,
+    },
+    modalTextHeading: {
+        marginBottom: 15,
+        fontWeight: "bold",
+        // fontSize: "16px"
+    }
 });
