@@ -30,7 +30,7 @@ const Restaurant = (props) => {
             restaurantID: resID,
             TotalPrice: total,
             ItemCount: count,
-            ItemName: ItemName,
+            ItemName: itemName,
             menuID: menuID
         }
         console.log(order, "orderrr");
@@ -450,4 +450,7 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect(null, { User_Order })(Restaurant);
+// const mapStateToProps = state = ({
+//     userOrder: state.user.userOrder,
+// });
+export default connect("", { User_Order })(Restaurant);

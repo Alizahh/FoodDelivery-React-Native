@@ -19,9 +19,17 @@ const SignupScreen = (props) => {
             webClientId: "646054229540-s203h9enovmu5d0fcfovfipfdcp21ivv.apps.googleusercontent.com",
             offlineAccess: true
         });
-        props.User_Log_In(false);
         // setUsergoogleinfo({ loader: false });
-    }, [])
+    }, []);
+
+
+    useEffect(() => {
+        props.User_Log_In(false);
+        if (props.UserLogin) {
+            signOut();
+        }
+    }, [props.UserLogin]);
+
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [emailValidation, setEmailValidation] = useState();
@@ -76,6 +84,16 @@ const SignupScreen = (props) => {
     //         }
     //     }
     // }
+
+    const signOut = async () => {
+        try {
+            await GoogleSignin.revokeAccess();
+            await GoogleSignin.signOut();
+            props.User_Log_In(false)
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const signIn = async () => {
         // try {
@@ -311,7 +329,7 @@ const styles = StyleSheet.create({
     },
 
 
-
+    //modal
     view: {
         flex: 1,
         justifyContent: "center",

@@ -6,27 +6,49 @@ import {
     StyleSheet,
     TouchableOpacity,
     Image,
-    FlatList
+    FlatList,
+    Modal,
+    TouchableHighlight
 } from "react-native";
 import axios from "axios";
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 import { useState } from "react/cjs/react.development";
+
+import { User_Log_In } from "../Redux/Actions/userAction";
 //redux
 import { connect } from "react-redux";
 const Home = (props) => {
+
+    const [orderCount, setOrderCount] = useState("");
+    const [orderPrice, setOrderPrice] = useState("");
+    const [orderName, setOrderName] = useState("")
+    //to signout the user
     useEffect(() => {
-        console.log(props.userData._id, "USER DATA")
-    }, [props.userData])
+        // props.User_Log_In(true);
+        console.log(props.userOrder, "user dataaaaaa")
+    }, []);
+
+
+    // useEffect(() => {
+    //     console.log(props.userOrder, "user Order")
+    //     if (props.userOrder != "") {
+    //         setOrderCount(userOrder.ItemCount);
+    //         setOrderPrice(userOrder.TotalPrice);
+    //         setOrderName(userOrder.ItemName);
+    //     }
+    // }, [props.userOrder]);
+
     // Dummy Datas
     const [categoryData, setCategoryData] = useState([]);
     const [restaurantData, setRestaurantData] = useState([]);
 
-
+    //cart modal
+    const [cartDetail, setCartDetail] = useState(false);
     const [categories, setCategories] = React.useState(categoryData)
     const [selectedCategory, setSelectedCategory] = React.useState(null)
     const [restaurants, setRestaurants] = React.useState(restaurantData)
     const [currentLocation, setCurrentLocation] = React.useState({});
-    console.log(categories, "categories dataaaaaaaaaaaa")
+    // console.log(categories, "categories dataaaaaaaaaaaa")
 
     const initialCurrentLocation = {
         streetName: "Xord",
@@ -58,7 +80,10 @@ const Home = (props) => {
         APIs();
     }, [])
 
-
+    const Cart = () => {
+        console.log("clickedddddddd")
+        setCartDetail(!cartDetail)
+    };
 
 
     function onSelectCategory(category) {
@@ -120,6 +145,7 @@ const Home = (props) => {
                         paddingRight: SIZES.padding * 2,
                         justifyContent: 'center'
                     }}
+                    onPress={Cart}
                 >
                     <Image
                         source={icons.basket}
@@ -128,9 +154,30 @@ const Home = (props) => {
                             width: 30,
                             height: 30
                         }}
+
                     />
+                    < Modal
+                        transparent={true}
+                        visible={cartDetail}
+                        onRequestClose={Cart}
+                    >
+                        <View style={styles.view}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalTextHeading}> Your Order</Text>
+                                <Text style={styles.modalText}>{orderName}</Text>
+                                <Text style={styles.modalText}>{orderPrice}</Text>
+                                <Text style={styles.modalText}>{orderCount}</Text>
+                                <TouchableOpacity
+                                    style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                                    onPress={Cart}
+                                >
+                                    <Text style={styles.textStyle}>Cancel</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
                 </TouchableOpacity>
-            </View>
+            </View >
         )
     }
 
@@ -338,9 +385,51 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 3,
         elevation: 1,
+    },
+    view: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+    openButton: {
+        backgroundColor: "#115454",
+        borderRadius: 5,
+        padding: 15,
+        elevation: 2
+    },
+    textStyle: {
+        color: "white",
+        textAlign: "center",
+    },
+    modalText: {
+        marginBottom: 15,
+    },
+    modalTextHeading: {
+        marginBottom: 15,
+        fontWeight: "bold",
+        // fontSize: "16px"
     }
 })
 const mapStateToProps = (state) => ({
-    userData: state.user.userData
+    userData: state.user.userData,
+    UserLogin: state.user.userLoggedIn,
+    userOrder: state.user.UserOrder
+
 });
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, { User_Log_In })(Home);
