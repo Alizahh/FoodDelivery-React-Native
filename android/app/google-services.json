@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1000922679265",
+    "project_id": "streamy-292614",
+    "storage_bucket": "streamy-292614.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000922679265:android:5c2df7e4f8d4aae56ff4a0",
+        "android_client_info": {
+          "package_name": "com.fooddeliveryapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1000922679265-l16u71lrf58ttfaqtaju28i1g3h311lf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXvRAr-rqJ1XYDvMZ7pZ0xw18yk2TzB5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1000922679265-0ve5obpvsbljskh9j7j437ecb9tghpcg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

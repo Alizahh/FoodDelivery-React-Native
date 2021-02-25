@@ -4,12 +4,15 @@ import FormInput from '../components/FormInput.js';
 import FormButton from '../components/FormButton';
 import axios from "axios";
 import { GoogleSignin, GoogleButton, GoogleSigninButton } from '@react-native-community/google-signin';
+import { User_Log_In, Add_User_Data } from "../Redux/Actions/userAction";
+//redux
+import { connect } from 'react-redux';
 
 GoogleSignin.configure({
-    webClientId: "850930616765-6qirch0v0p4b0buq5jetf5dju4ec1fuv.apps.googleusercontent.com",
+    webClientId: "1000922679265-0ve5obpvsbljskh9j7j437ecb9tghpcg.apps.googleusercontent.com",
     offlineAccess: true
 })
-const SignupScreen = ({ navigation }) => {
+const SignupScreen = (props) => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [emailValidation, setEmailValidation] = useState();
@@ -32,7 +35,7 @@ const SignupScreen = ({ navigation }) => {
                 loader: true
             });
             SVGPathSegCurvetoCubicSmoothRel.log(userInfo, "userrrrrrrrrrrrrrrrrrrr infooooooooooooo")
-            navigation.navigate('Home');
+            props.navigation.navigate('Home');
         } catch (e) {
             console.log(e, "error");
         }
@@ -59,12 +62,14 @@ const SignupScreen = ({ navigation }) => {
             try {
                 let submit = await axios.post(`https://sleepy-earth-11653.herokuapp.com/user/regUser`, data);
                 console.log(submit.data.data, "user reguser request")
+                props.User_Log_In(true);
+                props.Add_User_Data(submit.data.data);
                 let email = await axios.post(`https://sleepy-earth-11653.herokuapp.com/sendMail`);
                 setMessage("You have successfully signed in!")
                 setModaOpen(true);
                 setEmail("")
                 setPassword("")
-                navigation.navigate('Home');
+                props.navigation.navigate('Home');
                 return submit;
             } catch (e) {
                 setMessage("This email is already in user.")
@@ -159,7 +164,7 @@ const SignupScreen = ({ navigation }) => {
 
             <TouchableOpacity
                 style={styles.navButton}
-                onPress={() => navigation.navigate('Login')}>
+                onPress={() => props.navigation.navigate('Login')}>
                 <Text style={styles.navButtonText}>
                     Have an account? Sign In
         </Text>
@@ -168,7 +173,10 @@ const SignupScreen = ({ navigation }) => {
     );
 };
 
-export default SignupScreen;
+const mapStateToProps = (state) => ({
+    UserLogin: state.user.userLoggedIn
+});
+export default connect(mapStateToProps, { User_Log_In, Add_User_Data })(SignupScreen);
 
 const styles = StyleSheet.create({
     container: {
