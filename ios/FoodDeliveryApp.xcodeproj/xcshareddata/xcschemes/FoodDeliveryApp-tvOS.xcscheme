@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "FoodDeliveryApp-tvOS.app"
-               BlueprintName = "FoodDeliveryApp-tvOS"
-               ReferencedContainer = "container:FoodDeliveryApp.xcodeproj">
+               BuildableName = "FoodDeliveryAppTest-tvOS.app"
+               BlueprintName = "FoodDeliveryAppTest-tvOS"
+               ReferencedContainer = "container:FoodDeliveryAppTest.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "FoodDeliveryApp-tvOSTests.xctest"
-               BlueprintName = "FoodDeliveryApp-tvOSTests"
-               ReferencedContainer = "container:FoodDeliveryApp.xcodeproj">
+               BuildableName = "FoodDeliveryAppTest-tvOSTests.xctest"
+               BlueprintName = "FoodDeliveryAppTest-tvOSTests"
+               ReferencedContainer = "container:FoodDeliveryAppTest.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "FoodDeliveryApp-tvOS.app"
-            BlueprintName = "FoodDeliveryApp-tvOS"
-            ReferencedContainer = "container:FoodDeliveryApp.xcodeproj">
+            BuildableName = "FoodDeliveryAppTest-tvOS.app"
+            BlueprintName = "FoodDeliveryAppTest-tvOS"
+            ReferencedContainer = "container:FoodDeliveryAppTest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "FoodDeliveryApp-tvOS.app"
-            BlueprintName = "FoodDeliveryApp-tvOS"
-            ReferencedContainer = "container:FoodDeliveryApp.xcodeproj">
+            BuildableName = "FoodDeliveryAppTest-tvOS.app"
+            BlueprintName = "FoodDeliveryAppTest-tvOS"
+            ReferencedContainer = "container:FoodDeliveryAppTest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     StyleSheet,
     SafeAreaView,
@@ -9,19 +9,42 @@ import {
     Animated
 } from "react-native";
 import { isIphoneX } from 'react-native-iphone-x-helper'
-
+import { connect } from "react-redux";
+import { User_Order } from "../Redux/Actions/userAction";
 import { icons, images, COLORS, SIZES, FONTS } from '../constants'
 
-const Restaurant = ({ route, navigation }) => {
+const Restaurant = (props) => {
 
     const scrollX = new Animated.Value(0);
     const [restaurant, setRestaurant] = React.useState(null);
     const [currentLocation, setCurrentLocation] = React.useState(null);
     const [orderItems, setOrderItems] = React.useState([]);
+    const [count, setCount] = useState(0);
+    const [total, setTotal] = useState(0);
+    const [itemName, setItemName] = useState("");
+    const [resID, setResID] = useState(null);
+    const [menuID, setMenuID] = useState(null);
 
+    const submitOrder = () => {
+        let order = {
+            restaurantID: resID,
+            TotalPrice: total,
+            ItemCount: count,
+            ItemName: ItemName,
+            menuID: menuID
+        }
+        console.log(order, "orderrr");
+        props.User_Order(order);
+        props.navigation.navigate("OrderDelivery", {
+            restaurant: restaurant,
+            currentLocation: currentLocation
+        });
+    }
     React.useEffect(() => {
-        let { item, currentLocation } = route.params;
-
+        let { item, currentLocation } = props.route.params;
+        console.log(item.id, "itemmmmmmmmmmm")
+        setResID(item.id);
+        setItemName(item.name);
         setRestaurant(item)
         setCurrentLocation(currentLocation)
     })
@@ -35,6 +58,8 @@ const Restaurant = ({ route, navigation }) => {
                 let newQty = item[0].qty + 1
                 item[0].qty = newQty
                 item[0].total = item[0].qty * price
+                setTotal(item[0].total);
+                setCount(item[0].qty);
             } else {
                 const newItem = {
                     menuId: menuId,
@@ -52,11 +77,14 @@ const Restaurant = ({ route, navigation }) => {
                     let newQty = item[0].qty - 1
                     item[0].qty = newQty
                     item[0].total = newQty * price
+                    setTotal(item[0].total);
+                    setCount(item[0].qty);
                 }
             }
 
             setOrderItems(orderList)
         }
+        setMenuID(menuId);
     }
 
     function getOrderQty(menuId) {
@@ -71,7 +99,7 @@ const Restaurant = ({ route, navigation }) => {
 
     function getBasketItemCount() {
         let itemCount = orderItems.reduce((a, b) => a + (b.qty || 0), 0)
-
+        // setCount(itemCount);
         return itemCount
     }
 
@@ -90,7 +118,7 @@ const Restaurant = ({ route, navigation }) => {
                         paddingLeft: SIZES.padding * 2,
                         justifyContent: 'center'
                     }}
-                    onPress={() => navigation.goBack()}
+                    onPress={() => props.navigation.goBack()}
                 >
                     <Image
                         source={icons.back}
@@ -376,7 +404,7 @@ const Restaurant = ({ route, navigation }) => {
                                     tintColor: COLORS.darkgray
                                 }}
                             />
-                            <Text style={{ marginLeft: SIZES.padding, ...FONTS.h4 }}>8888</Text>
+                            <Text style={{ marginLeft: SIZES.padding, ...FONTS.h4 }}>Xord</Text>
                         </View>
                     </View>
 
@@ -396,10 +424,7 @@ const Restaurant = ({ route, navigation }) => {
                                 alignItems: 'center',
                                 borderRadius: SIZES.radius
                             }}
-                            onPress={() => navigation.navigate("OrderDelivery", {
-                                restaurant: restaurant,
-                                currentLocation: currentLocation
-                            })}
+                            onPress={submitOrder}
                         >
                             <Text style={{ color: COLORS.white, ...FONTS.h2 }}>Order</Text>
                         </TouchableOpacity>
@@ -425,4 +450,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Restaurant;
+export default connect(null, { User_Order })(Restaurant);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     SafeAreaView,
     View,
@@ -11,9 +11,12 @@ import {
 import axios from "axios";
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 import { useState } from "react/cjs/react.development";
-
-const Home = ({ navigation }) => {
-
+//redux
+import { connect } from "react-redux";
+const Home = (props) => {
+    useEffect(() => {
+        console.log(props.userData._id, "USER DATA")
+    }, [props.userData])
     // Dummy Datas
     const [categoryData, setCategoryData] = useState([]);
     const [restaurantData, setRestaurantData] = useState([]);
@@ -22,7 +25,7 @@ const Home = ({ navigation }) => {
     const [categories, setCategories] = React.useState(categoryData)
     const [selectedCategory, setSelectedCategory] = React.useState(null)
     const [restaurants, setRestaurants] = React.useState(restaurantData)
-    const [currentLocation, setCurrentLocation] = React.useState({})
+    const [currentLocation, setCurrentLocation] = React.useState({});
     console.log(categories, "categories dataaaaaaaaaaaa")
 
     const initialCurrentLocation = {
@@ -201,7 +204,7 @@ const Home = ({ navigation }) => {
         const renderItem = ({ item }) => (
             <TouchableOpacity
                 style={{ marginBottom: SIZES.padding * 2 }}
-                onPress={() => navigation.navigate("Restaurant", {
+                onPress={() => props.navigation.navigate("Restaurant", {
                     item,
                     currentLocation
                 })}
@@ -337,5 +340,7 @@ const styles = StyleSheet.create({
         elevation: 1,
     }
 })
-
-export default Home;
+const mapStateToProps = (state) => ({
+    userData: state.user.userData
+});
+export default connect(mapStateToProps)(Home);

@@ -9,7 +9,7 @@ import Tabs from './navigation/tabs'
 //redux
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "./redux";
+import { store, persistor } from "./Redux/Store";
 
 const Stack = createStackNavigator();
 

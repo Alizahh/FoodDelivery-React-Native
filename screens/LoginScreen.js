@@ -1,9 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import FormInput from '../components/FormInput.js';
 import FormButton from '../components/FormButton';
 import axios from "axios";
-const LoginScreen = ({ navigation }) => {
+import { connect } from "react-redux";
+import { User_Log_In, Add_User_Data } from "../Redux/Actions/userAction";
+const LoginScreen = (props) => {
+    useEffect(() => {
+        props.User_Log_In(false);
+    }, [])
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [userDetails, setUserDetails] = useState({});
@@ -19,14 +24,16 @@ const LoginScreen = ({ navigation }) => {
                 let submit = await axios.post(`https://sleepy-earth-11653.herokuapp.com/user/login`, data);
                 console.log(submit.data.data, "submit");
                 setUserDetails(submit.data.data);
+                props.Add_User_Data(submit.data.data);
+                props.User_Log_In(true);
                 setMessage("You have successfully logged in!")
                 setEmail("")
                 setPassword("")
                 setModaOpen(true);
-                let email = await axios.post(`https://sleepy-earth-11653.herokuapp.com/sendMail`);
-                console.log(email, "emailllllllllllll")
-                alert("email sent");
-                navigation.navigate('Home');
+                // let email = await axios.post(`https://sleepy-earth-11653.herokuapp.com/sendMail`);
+                // console.log(email, "emailllllllllllll")
+                // alert("email sent");
+                props.navigation.navigate('Home');
 
             } catch (e) {
                 setMessage("Wrong password or email.")
@@ -41,7 +48,7 @@ const LoginScreen = ({ navigation }) => {
             setEmail("")
             setPassword("")
             setModaOpen(true);
-            navigation.navigate('Login');
+            props.navigation.navigate('Login');
         }
 
     }
@@ -101,8 +108,10 @@ const LoginScreen = ({ navigation }) => {
         </View>
     );
 };
+const mapStateToProps = state => ({
 
-export default LoginScreen;
+});
+export default connect(mapStateToProps, { User_Log_In, Add_User_Data, })(LoginScreen);
 
 const styles = StyleSheet.create({
     container: {

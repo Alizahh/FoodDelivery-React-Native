@@ -18,6 +18,7 @@ Be sure to subscribe to our YouTube channel for more videos like this!
   <img src="https://contributors-img.web.app/image?repo=byprogrammers/lets-code-react-native" />
 </a>
 
+package_name:"com.fooddeliveryapptest"
 SHA1-KEY:"5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25"
 tracking number in Auth0:"c5097841059545725"
 

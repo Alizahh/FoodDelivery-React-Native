@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'FoodDeliveryApp' do
+target 'FoodDeliveryAppTestTest' do
   # React Native Maps dependencies
   rn_maps_path = '../node_modules/react-native-maps'
   pod 'react-native-google-maps', :path => rn_maps_path
@@ -14,7 +14,7 @@ target 'FoodDeliveryApp' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-  target 'FoodDeliveryAppTests' do
+  target 'FoodDeliveryAppTestTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -29,10 +29,10 @@ target 'FoodDeliveryApp' do
   end
 end
 
-target 'FoodDeliveryApp-tvOS' do
-  # Pods for FoodDeliveryApp-tvOS
+target 'FoodDeliveryAppTestTest-tvOS' do
+  # Pods for FoodDeliveryAppTest-tvOS
 
-  target 'FoodDeliveryApp-tvOSTests' do
+  target 'FoodDeliveryAppTestTest-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

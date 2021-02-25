@@ -9,7 +9,7 @@ const persistConfig = {
     storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+export const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const initialState = {};
 
@@ -20,6 +20,8 @@ export const store = createStore(
     initialState,
     compose(
         applyMiddleware(...middleWare),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+        // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
     )
 );
+
+export const persistor = persistStore(store);

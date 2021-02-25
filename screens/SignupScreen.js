@@ -1,43 +1,118 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import FormInput from '../components/FormInput.js';
 import FormButton from '../components/FormButton';
 import axios from "axios";
 import { GoogleSignin, GoogleButton, GoogleSigninButton } from '@react-native-community/google-signin';
+import app from "@react-native-firebase/app"
+import auth from '@react-native-firebase/auth';
+
 import { User_Log_In, Add_User_Data } from "../Redux/Actions/userAction";
 //redux
 import { connect } from 'react-redux';
 
-GoogleSignin.configure({
-    webClientId: "1000922679265-0ve5obpvsbljskh9j7j437ecb9tghpcg.apps.googleusercontent.com",
-    offlineAccess: true
-})
+
+
 const SignupScreen = (props) => {
+    useEffect(() => {
+        GoogleSignin.configure({
+            webClientId: "646054229540-s203h9enovmu5d0fcfovfipfdcp21ivv.apps.googleusercontent.com",
+            offlineAccess: true
+        });
+        props.User_Log_In(false);
+        // setUsergoogleinfo({ loader: false });
+    }, [])
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [emailValidation, setEmailValidation] = useState();
-    // const [confirmPassword, setConfirmPassword] = useState();
+    const [name, setName] = useState("")
+    const [photo, setPhoto] = useState("");
+
+    const [UserModal, setUserModal] = useState(false);
+
     const [ModalOpen, setModaOpen] = useState(false);
     const [message, setMessage] = useState("");
+
     const [usergoogleinfo, setUsergoogleinfo] = useState({
         userGoogleInfo: {},
-        loader: false
+        loader: false,
+        token: null,
+        id: ""
     });
+
+    useEffect(() => {
+        console.log(usergoogleinfo, "useeffect")
+        console.log(usergoogleinfo.loader, "loaderrrrrrrrrrrrrrr")
+    }, [usergoogleinfo]);
+
+
+    // const signIn = async () => {
+    //     console.log("hereee");
+    //     try {
+    //         await GoogleSignin.hasPlayServices();
+    //         const info = await GoogleSignin.signIn();
+    //         setEmail(info.user.email);
+    //         setName(info.user.name);
+    //         setPhoto(info.user.photo);
+    //         setUserModal(true);
+    //         setUsergoogleinfo({
+    //             userGoogleInfo: info.user,
+    //             loader: true,
+    //             token: info.idToken,
+    //             id: info.user.id
+    //         });
+    //         props.navigation.navigate('Home');
+    //         console.log(info, "info");
+
+    //     } catch (error) {
+    //         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+    //             // user cancelled the login flow
+    //         } else if (error.code === statusCodes.IN_PROGRESS) {
+    //             // operation (e.g. sign in) is in progress already
+    //         } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+    //             // play services not available or outdated
+    //         } else {
+    //             // some other error happened
+    //         }
+    //     }
+    // }
+
     const signIn = async () => {
+        // try {
+        //     await GoogleSignin.hasPlayServices()
+        //     const userInfo = await GoogleSignin.signIn();
+        //     console.log(userInfo, "infoooooooooooooo")
+        //     setUsergoogleinfo({
+        //         userGoogleInfo: userInfo,
+        //         loader: true
+        //     });
+        // } catch (e) {
+        //     console.log(e, "error");
+        // }
         try {
-            let test = await GoogleSignin.hasPlayServices();
-            console.log(test, "testttttttttttttt")
-            const userInfo = await GoogleSignin.signIn();
-            console.log(userInfo, "userInfooooooooooooooooooooooooo");
-            console.log
+            // await GoogleSignin.hasPlayServices();
+            const { accessToken, idToken, user } = await GoogleSignin.signIn();
+            setEmail(user.email);
+            setName(user.name);
+            setPhoto(user.photo);
+            setUserModal(true);
             setUsergoogleinfo({
-                userGoogleInfo: userInfo,
-                loader: true
+                usergoogleinfo: user,
+                loader: true,
+                token: idToken,
+                id: user.id
             });
-            SVGPathSegCurvetoCubicSmoothRel.log(userInfo, "userrrrrrrrrrrrrrrrrrrr infooooooooooooo")
             props.navigation.navigate('Home');
-        } catch (e) {
-            console.log(e, "error");
+            console.log(user, "userrrrrrrr")
+            props.User_Log_In(true);
+            const credential = auth.GoogleAuthProvider.credential(
+                idToken,
+                accessToken,
+            );
+            const result = await auth().signInWithCredential(credential);
+            console.log(result, "result")
+        } catch (error) {
+            console.log(error)
         }
     }
     const emailChange = (e) => {
@@ -137,21 +212,42 @@ const SignupScreen = (props) => {
             />
             <View>
                 <GoogleSigninButton
+                    style={{ width: 192, height: 48, marginTop: 40 }}
+                    size={GoogleSigninButton.Size.Wide}
+                    color={GoogleSigninButton.Color.Dark}
                     onPress={signIn}
-                    size={GoogleSigninButton.Size.Dark}
-                    style={{ width: 100, height: 100 }}
                 />
-                {usergoogleinfo.loaded ?
-                    <View>
-                        <Text>{usergoogleinfo.userGoogleInfo.user.name}</Text>
-                        <Text>{usergoogleinfo.userGoogleInfo.user.email}</Text>
-                        <Image
-                            style={{ width: '100', height: '100' }}
-                            source={{ uri: this.state.GoogleInfo.user.photo }}
-                        />
-                    </View> :
-                    <Text>Not Signedin</Text>
-                }
+
+
+                <Modal
+                    transparent={true}
+                    visible={UserModal}
+                    onRequestClose={() => {
+                        setUserModal(false);
+                    }}
+                >
+                    <View style={styles.view}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalTextHeading}> Disclaimer</Text>
+                            <Text>{name}</Text>
+                            <Text>{email}</Text>
+                            {/* <Image
+                                style={{ width: '100', height: '100' }}
+                                source={{ uri: photo }}
+                            /> */}
+                            <TouchableHighlight
+                                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                                onPress={() => {
+                                    setUserModal(false);
+                                }}
+                            >
+                                <Text style={styles.textStyle}>Cancel</Text>
+                            </TouchableHighlight>
+                        </View>
+
+                    </View>
+                </Modal>
+                {/* <Text alignItems="center">Not Signedin</Text> */}
             </View>
             <View style={styles.textPrivate}>
                 <Text style={styles.color_textPrivate}>By registering, you confirm that you accept our </Text>

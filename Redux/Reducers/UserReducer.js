@@ -6,9 +6,9 @@ import {
     CLEAR_ORDER
 } from "../types";
 const INITIAL_STATE = {
-    UserOrder={},
-    userLoggedIn=false,
-    userData={}
+    UserOrder: {},
+    userLoggedIn: false,
+    userData: {}
 };
 
 const UserReducer = (state = INITIAL_STATE, action) => {

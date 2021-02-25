@@ -11,8 +11,9 @@ import MapViewDirections from "react-native-maps-directions";
 import { COLORS, FONTS, icons, SIZES, GOOGLE_API_KEY } from "../constants"
 
 // import stripe from 'tipsi-stripe';
-
-const OrderDelivery = ({ route, navigation }) => {
+import { connect } from "react-redux";
+import { Clear_User_Order } from "../Redux/Actions/userAction";
+const OrderDelivery = (props) => {
 
     // stripe.setOptions({
     //     publishableKey: 'pk_test_51INtknCmKO2vXjCvEqnDcNP8bWng9ytDb1IHTkbGFluiiinZdBbQiRqzl5tuCzDX51PGyjwhJEWBqRE5UaP0zg4Q002w0LG5bg',
@@ -32,7 +33,7 @@ const OrderDelivery = ({ route, navigation }) => {
     const [angle, setAngle] = React.useState(0)
 
     React.useEffect(() => {
-        let { restaurant, currentLocation } = route.params;
+        let { restaurant, currentLocation } = props.route.params;
 
         let fromLoc = currentLocation.gps
         let toLoc = restaurant.location
@@ -53,8 +54,19 @@ const OrderDelivery = ({ route, navigation }) => {
 
     }, [])
     submitOrder = async () => {
-        console.log("here in submit ")
+        console.log("here in submit ");
+        let userOrder = {
+
+        }
+        // try {
+        // let req = await axios.post(`https://sleepy-earth-11653.herokuapp.com/restaurantData/userOrder`, props.UserOrder);
         alert("order placed");
+        console.log(req, "req");
+        props.clea
+        // } catch (e) {
+        //     alert(e);
+        // }
+
         // try {
         //     const paymentMethod = await stripe.createPaymentMethod({
         //         card: {
@@ -182,7 +194,7 @@ const OrderDelivery = ({ route, navigation }) => {
                             setDuration(result.duration)
 
                             if (!isReady) {
-                                // Fit route into maps
+                                // Fit props.route into maps
                                 mapView.current.fitToCoordinates(result.coordinates, {
                                     edgePadding: {
                                         right: (SIZES.width / 20),
@@ -340,7 +352,7 @@ const OrderDelivery = ({ route, navigation }) => {
                                 justifyContent: 'center',
                                 borderRadius: 10
                             }}
-                            onPress={() => { navigation.navigate('Restaurant') }}
+                            onPress={() => { props.navigation.navigate('Restaurant') }}
                         >
                             <Text style={{ ...FONTS.h4, color: COLORS.white }}>Cancel</Text>
                         </TouchableOpacity>
@@ -406,5 +418,7 @@ const OrderDelivery = ({ route, navigation }) => {
         </View>
     )
 }
-
-export default OrderDelivery;
+const mapStateToProps = state => ({
+    UserOrder: state.user.UserOrder
+});
+export default connect(mapStateToProps, {})(OrderDelivery);
