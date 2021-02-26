@@ -4,7 +4,7 @@ import FormInput from '../components/FormInput.js';
 import FormButton from '../components/FormButton';
 import axios from "axios";
 import { connect } from "react-redux";
-import { User_Log_In, Add_User_Data, Clear_User_Order } from "../Redux/Actions/userAction";
+import { User_Log_In, Add_User_Data, Clear_User_Order, Google_Signin } from "../Redux/Actions/userAction";
 const LoginScreen = (props) => {
     useEffect(() => {
         props.User_Log_In(false);
@@ -29,9 +29,10 @@ const LoginScreen = (props) => {
                 setUserDetails(submit.data.data);
                 props.Add_User_Data(submit.data.data);
                 props.User_Log_In(true);
+                props.Google_Signin(false);
                 setMessage("You have successfully logged in!")
-                setEmail("")
-                setPassword("")
+                setEmail("");
+                setPassword("");
                 setModaOpen(true);
                 // let email = await axios.post(`https://sleepy-earth-11653.herokuapp.com/sendMail`);
                 // console.log(email, "emailllllllllllll")
@@ -114,7 +115,7 @@ const LoginScreen = (props) => {
 const mapStateToProps = state => ({
 
 });
-export default connect(mapStateToProps, { User_Log_In, Add_User_Data, Clear_User_Order })(LoginScreen);
+export default connect(mapStateToProps, { User_Log_In, Add_User_Data, Clear_User_Order, Google_Signin })(LoginScreen);
 
 const styles = StyleSheet.create({
     container: {

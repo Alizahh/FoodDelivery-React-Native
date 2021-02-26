@@ -14,27 +14,40 @@ import axios from "axios";
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 import { useState } from "react/cjs/react.development";
 
-import { User_Log_In } from "../Redux/Actions/userAction";
+import { GoogleSignin, GoogleButton, GoogleSigninButton } from '@react-native-community/google-signin';
+import app from "@react-native-firebase/app"
+import auth from '@react-native-firebase/auth';
+
+
+import { User_Log_In, Clear_User_Order } from "../Redux/Actions/userAction";
 //redux
 import { connect } from "react-redux";
 const Home = (props) => {
 
     const [orderCount, setOrderCount] = useState("");
     const [orderPrice, setOrderPrice] = useState("");
-    const [orderName, setOrderName] = useState("")
+    const [orderName, setOrderName] = useState("");
+    const [loggedIn, setloggedIn] = useState(false);
     //to signout the user
+
+
     useEffect(() => {
+        GoogleSignin.configure({
+            webClientId: "646054229540-s203h9enovmu5d0fcfovfipfdcp21ivv.apps.googleusercontent.com",
+            offlineAccess: true
+        });
+
+        // const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+        // return subscriber; // unsubscribe on unmount
         // props.User_Log_In(true);
         console.log(props.OrderPLaced, "user dataaaaaa")
     }, []);
 
-
-    // useEffect(() => {
-    //     console.log(props.userOrder, "user Order")
-    //     console.log(props.OrderPLaced, "order placed")
-
-    // }, [props.OrderPLaced]);
-
+    // function onAuthStateChanged(user) {
+    //     setUser(user);
+    //     console.log(user);
+    //     if (user) setloggedIn(true);
+    // }
     // Dummy Datas
     const [categoryData, setCategoryData] = useState([]);
     const [restaurantData, setRestaurantData] = useState([]);
@@ -53,6 +66,35 @@ const Home = (props) => {
             latitude: 24.863689,
             longitude: 67.060469
         }
+    }
+    const signOut = async () => {
+        if (props.GoogleSignin) {
+            try {
+                await GoogleSignin.revokeAccess();
+                await GoogleSignin.signOut();
+                auth()
+                    .signOut()
+                    .then(() => alert('Your are signed out!'));
+                setloggedIn(false);
+                props.User_Log_In(false)
+                props.navigation.navigate("Signup")
+                props.Clear_User_Order();
+                // setuserInfo([]);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        else {
+            setloggedIn(false);
+            props.navigation.navigate("Signup")
+            alert("You are signed out")
+            props.User_Log_In(false);
+            props.Clear_User_Order();
+        }
+    };
+    const LogOut = () => {
+        console.log("logout clicked")
+        signOut();
     }
     const APIs = async () => {
         setCurrentLocation(initialCurrentLocation);
@@ -117,6 +159,7 @@ const Home = (props) => {
                         paddingLeft: SIZES.padding * 2,
                         justifyContent: 'center'
                     }}
+                    onPress={LogOut}
                 >
                     <Image
                         source={icons.nearby}
@@ -434,7 +477,8 @@ const mapStateToProps = (state) => ({
     userData: state.user.userData,
     UserLogin: state.user.userLoggedIn,
     userOrder: state.user.UserOrder,
-    OrderPLaced: state.user.OrderPLaced
+    OrderPLaced: state.user.OrderPLaced,
+    GoogleSignin: state.user.GoogleSignin
 
 });
-export default connect(mapStateToProps, { User_Log_In })(Home);
+export default connect(mapStateToProps, { User_Log_In, Clear_User_Order })(Home);

@@ -3,7 +3,8 @@ import {
     USER_LOGGED_IN,
     ADD_USER_DATA,
     CLEAR_ORDER,
-    ORDER_PLACED
+    ORDER_PLACED,
+    GOOGLE_SIGNIN
 } from "../types";
 
 export const User_Order = order => {
@@ -15,6 +16,14 @@ export const User_Order = order => {
     }
 };
 
+export const Google_Signin = value => {
+    return async (dispatch) => {
+        dispatch({
+            type: GOOGLE_SIGNIN,
+            payload: value,
+        });
+    }
+};
 export const Order_PLaced = order => {
     return async (dispatch) => {
         dispatch({

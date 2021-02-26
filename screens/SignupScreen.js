@@ -7,7 +7,7 @@ import { GoogleSignin, GoogleButton, GoogleSigninButton } from '@react-native-co
 import app from "@react-native-firebase/app"
 import auth from '@react-native-firebase/auth';
 
-import { User_Log_In, Add_User_Data, Clear_User_Order } from "../Redux/Actions/userAction";
+import { User_Log_In, Add_User_Data, Clear_User_Order, Google_Signin } from "../Redux/Actions/userAction";
 //redux
 import { connect } from 'react-redux';
 
@@ -26,7 +26,6 @@ const SignupScreen = (props) => {
     useEffect(() => {
         props.User_Log_In(false);
         if (props.UserLogin) {
-            signOut();
             props.Clear_User_Order();
         }
     }, [props.UserLogin]);
@@ -86,15 +85,15 @@ const SignupScreen = (props) => {
     //     }
     // }
 
-    const signOut = async () => {
-        try {
-            await GoogleSignin.revokeAccess();
-            await GoogleSignin.signOut();
-            props.User_Log_In(false)
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    // const signOut = async () => {
+    //     try {
+    //         await GoogleSignin.revokeAccess();
+    //         await GoogleSignin.signOut();
+    //         props.User_Log_In(false);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
 
     const signIn = async () => {
         // try {
@@ -129,6 +128,7 @@ const SignupScreen = (props) => {
                 accessToken,
             );
             const result = await auth().signInWithCredential(credential);
+            props.Google_Signin(true);
             console.log(result, "result")
         } catch (error) {
             console.log(error)
@@ -155,7 +155,8 @@ const SignupScreen = (props) => {
         if (email !== "" && password !== "") {
             try {
                 let submit = await axios.post(`https://sleepy-earth-11653.herokuapp.com/user/regUser`, data);
-                console.log(submit.data.data, "user reguser request")
+                console.log(submit.data.data, "user reguser request");
+                props.Google_Signin(false);
                 props.User_Log_In(true);
                 props.Add_User_Data(submit.data.data);
                 let email = await axios.post(`https://sleepy-earth-11653.herokuapp.com/sendMail`);
@@ -291,7 +292,7 @@ const SignupScreen = (props) => {
 const mapStateToProps = (state) => ({
     UserLogin: state.user.userLoggedIn
 });
-export default connect(mapStateToProps, { User_Log_In, Add_User_Data, Clear_User_Order })(SignupScreen);
+export default connect(mapStateToProps, { User_Log_In, Add_User_Data, Clear_User_Order, Google_Signin })(SignupScreen);
 
 const styles = StyleSheet.create({
     container: {

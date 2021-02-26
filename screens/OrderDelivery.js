@@ -61,6 +61,7 @@ const OrderDelivery = (props) => {
         // try {
         // let req = await axios.post(`https://sleepy-earth-11653.herokuapp.com/restaurantData/userOrder`, props.UserOrder);
         alert("order placed");
+        props.navigation.navigate("Home")
         console.log(req, "req");
         props.clea
         // } catch (e) {
