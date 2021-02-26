@@ -4,10 +4,13 @@ import FormInput from '../components/FormInput.js';
 import FormButton from '../components/FormButton';
 import axios from "axios";
 import { connect } from "react-redux";
-import { User_Log_In, Add_User_Data } from "../Redux/Actions/userAction";
+import { User_Log_In, Add_User_Data, Clear_User_Order } from "../Redux/Actions/userAction";
 const LoginScreen = (props) => {
     useEffect(() => {
         props.User_Log_In(false);
+        props.Clear_User_Order();
+        setEmail("");
+        setPassword("");
     }, [])
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -94,14 +97,14 @@ const LoginScreen = (props) => {
                         <Text style={styles.modalTextHeading}> Disclaimer</Text>
                         <Text style={styles.modalText}>{message}</Text>
 
-                        <TouchableHighlight
+                        <TouchableOpacity
                             style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
                             onPress={() => {
                                 setModaOpen(false);
                             }}
                         >
                             <Text style={styles.textStyle}>Cancel</Text>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
@@ -111,7 +114,7 @@ const LoginScreen = (props) => {
 const mapStateToProps = state => ({
 
 });
-export default connect(mapStateToProps, { User_Log_In, Add_User_Data, })(LoginScreen);
+export default connect(mapStateToProps, { User_Log_In, Add_User_Data, Clear_User_Order })(LoginScreen);
 
 const styles = StyleSheet.create({
     container: {

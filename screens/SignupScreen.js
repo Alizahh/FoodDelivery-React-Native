@@ -7,7 +7,7 @@ import { GoogleSignin, GoogleButton, GoogleSigninButton } from '@react-native-co
 import app from "@react-native-firebase/app"
 import auth from '@react-native-firebase/auth';
 
-import { User_Log_In, Add_User_Data } from "../Redux/Actions/userAction";
+import { User_Log_In, Add_User_Data, Clear_User_Order } from "../Redux/Actions/userAction";
 //redux
 import { connect } from 'react-redux';
 
@@ -27,6 +27,7 @@ const SignupScreen = (props) => {
         props.User_Log_In(false);
         if (props.UserLogin) {
             signOut();
+            props.Clear_User_Order();
         }
     }, [props.UserLogin]);
 
@@ -193,14 +194,14 @@ const SignupScreen = (props) => {
                         <Text style={styles.modalTextHeading}> Disclaimer</Text>
                         <Text style={styles.modalText}>{message}</Text>
 
-                        <TouchableHighlight
+                        <TouchableOpacity
                             style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
                             onPress={() => {
                                 setModaOpen(false);
                             }}
                         >
                             <Text style={styles.textStyle}>Cancel</Text>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
@@ -253,14 +254,14 @@ const SignupScreen = (props) => {
                                 style={{ width: '100', height: '100' }}
                                 source={{ uri: photo }}
                             /> */}
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
                                 onPress={() => {
                                     setUserModal(false);
                                 }}
                             >
                                 <Text style={styles.textStyle}>Cancel</Text>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         </View>
 
                     </View>
@@ -290,7 +291,7 @@ const SignupScreen = (props) => {
 const mapStateToProps = (state) => ({
     UserLogin: state.user.userLoggedIn
 });
-export default connect(mapStateToProps, { User_Log_In, Add_User_Data })(SignupScreen);
+export default connect(mapStateToProps, { User_Log_In, Add_User_Data, Clear_User_Order })(SignupScreen);
 
 const styles = StyleSheet.create({
     container: {

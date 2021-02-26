@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { isIphoneX } from 'react-native-iphone-x-helper'
 import { connect } from "react-redux";
-import { User_Order } from "../Redux/Actions/userAction";
+import { User_Order, Order_PLaced } from "../Redux/Actions/userAction";
 import { icons, images, COLORS, SIZES, FONTS } from '../constants'
 
 const Restaurant = (props) => {
@@ -34,7 +34,10 @@ const Restaurant = (props) => {
             menuID: menuID
         }
         console.log(order, "orderrr");
+
         props.User_Order(order);
+        props.Order_PLaced(true);
+
         props.navigation.navigate("OrderDelivery", {
             restaurant: restaurant,
             currentLocation: currentLocation
@@ -453,4 +456,4 @@ const styles = StyleSheet.create({
 // const mapStateToProps = state = ({
 //     userOrder: state.user.userOrder,
 // });
-export default connect("", { User_Order })(Restaurant);
+export default connect("", { User_Order, Order_PLaced })(Restaurant);

@@ -2,7 +2,8 @@ import {
     USER_ORDER,
     USER_LOGGED_IN,
     ADD_USER_DATA,
-    CLEAR_ORDER
+    CLEAR_ORDER,
+    ORDER_PLACED
 } from "../types";
 
 export const User_Order = order => {
@@ -14,6 +15,14 @@ export const User_Order = order => {
     }
 };
 
+export const Order_PLaced = order => {
+    return async (dispatch) => {
+        dispatch({
+            type: ORDER_PLACED,
+            payload: order,
+        });
+    }
+};
 
 export const Clear_User_Order = () => {
     return async (dispatch) => {

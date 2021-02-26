@@ -3,12 +3,14 @@ import {
     USER_ORDER,
     USER_LOGGED_IN,
     ADD_USER_DATA,
-    CLEAR_ORDER
+    CLEAR_ORDER,
+    ORDER_PLACED
 } from "../types";
 const INITIAL_STATE = {
     UserOrder: {},
     userLoggedIn: false,
-    userData: {}
+    userData: {},
+    OrderPLaced: false
 };
 
 const UserReducer = (state = INITIAL_STATE, action) => {
@@ -17,6 +19,12 @@ const UserReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 userLoggedIn: action.payload
+            };
+
+        case ORDER_PLACED:
+            return {
+                ...state,
+                OrderPLaced: action.payload
             };
 
         case USER_ORDER:

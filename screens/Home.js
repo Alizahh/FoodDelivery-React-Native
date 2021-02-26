@@ -25,18 +25,15 @@ const Home = (props) => {
     //to signout the user
     useEffect(() => {
         // props.User_Log_In(true);
-        console.log(props.userOrder, "user dataaaaaa")
+        console.log(props.OrderPLaced, "user dataaaaaa")
     }, []);
 
 
     // useEffect(() => {
     //     console.log(props.userOrder, "user Order")
-    //     if (props.userOrder != "") {
-    //         setOrderCount(userOrder.ItemCount);
-    //         setOrderPrice(userOrder.TotalPrice);
-    //         setOrderName(userOrder.ItemName);
-    //     }
-    // }, [props.userOrder]);
+    //     console.log(props.OrderPLaced, "order placed")
+
+    // }, [props.OrderPLaced]);
 
     // Dummy Datas
     const [categoryData, setCategoryData] = useState([]);
@@ -83,6 +80,13 @@ const Home = (props) => {
     const Cart = () => {
         console.log("clickedddddddd")
         setCartDetail(!cartDetail)
+        console.log(props.OrderPLaced, "user dataaaaa Cart")
+        if (props.OrderPLaced) {
+            console.group(props.userOrder.ItemName, "itemmmmmmmmmm nameeeeeeeeeee")
+            setOrderCount(props.userOrder.ItemCount);
+            setOrderPrice(props.userOrder.TotalPrice);
+            setOrderName(props.userOrder.ItemName);
+        }
     };
 
 
@@ -164,9 +168,9 @@ const Home = (props) => {
                         <View style={styles.view}>
                             <View style={styles.modalView}>
                                 <Text style={styles.modalTextHeading}> Your Order</Text>
-                                <Text style={styles.modalText}>{orderName}</Text>
-                                <Text style={styles.modalText}>{orderPrice}</Text>
-                                <Text style={styles.modalText}>{orderCount}</Text>
+                                <Text style={styles.modalText}>{props.OrderPLaced ? orderName : "no data"}</Text>
+                                <Text style={styles.modalText}>{props.OrderPLaced ? orderPrice : "no data"}</Text>
+                                <Text style={styles.modalText}>{props.OrderPLaced ? orderCount : "no data"}</Text>
                                 <TouchableOpacity
                                     style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
                                     onPress={Cart}
@@ -429,7 +433,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
     userData: state.user.userData,
     UserLogin: state.user.userLoggedIn,
-    userOrder: state.user.UserOrder
+    userOrder: state.user.UserOrder,
+    OrderPLaced: state.user.OrderPLaced
 
 });
 export default connect(mapStateToProps, { User_Log_In })(Home);
